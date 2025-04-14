@@ -1,11 +1,11 @@
 import { auth, clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
-import { createOrUpdateUser } from "./lib/user";  // Make sure the path is correct for your user.ts file
 
 const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/summaries(.*)",
   "/upload(.*)",
 ]);
+
 
 export default clerkMiddleware(async (auth, req) => {
   if (isProtectedRoute(req)) {
