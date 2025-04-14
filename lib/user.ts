@@ -15,10 +15,10 @@ export async function getSubscriptionStatus(user: User) {
   return true;
 }
 
-
+// lib/user.ts
 export async function createOrUpdateUser({
   sql,
-  id, // Clerk ID (TEXT)
+  id,
   email,
   full_name,
 }: {
@@ -28,14 +28,18 @@ export async function createOrUpdateUser({
   full_name: string;
 }) {
   try {
-    const user = await sql`SELECT * FROM users WHERE id = ${id}`;
-    if (user.length === 0) {
+    const result = await sql`SELECT * FROM users WHERE id = ${id}`;
+    if (result.length === 0) {
       await sql`
         INSERT INTO users (id, email, full_name)
         VALUES (${id}, ${email}, ${full_name})
       `;
+      return { id, email, full_name };
+    } else {
+      return result[0];
     }
   } catch (error) {
     console.error("Error creating or updating user", error);
+    return null;
   }
 }
